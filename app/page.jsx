@@ -33,15 +33,6 @@ function saveDraft(data) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function ProductIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/><path d="m17 15 3 3-3 3M20 18h-6"/></svg>;
-}
-function SupportIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12a8 8 0 0 1 16 0v5a3 3 0 0 1-3 3h-2"/><rect x="2" y="11" width="4" height="7" rx="2"/><rect x="18" y="11" width="4" height="7" rx="2"/><path d="M12 20h3"/></svg>;
-}
-function FounderIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="m12 2 2.3 6.7L21 11l-6.7 2.3L12 20l-2.3-6.7L3 11l6.7-2.3L12 2Z"/><path d="m19 19 1.4.6L21 21l.6-1.4L23 19l-1.4-.6L21 17l-.6 1.4L19 19Z"/></svg>;
-}
 
 export default function HomePage() {
   const [status, setStatus] = useState(null);
@@ -105,7 +96,6 @@ export default function HomePage() {
             <h1 id="hero-title">Nicht einfach<br/>mitarbeiten.<br/><em>Mitgründen.</em></h1>
             <p className="hero__copy">Du willst nicht nur Tickets schließen, sondern etwas Eigenes mit aufbauen? Bei <strong style={{ color: '#f0f6ec' }}>Vouchly by EZHost</strong> suchen wir jemanden mit Ideen, Tatendrang und einer gesunden Portion Chaosresistenz.</p>
             <div className="hero__actions"><a className="btn btn--lime" href="#bewerben">Ich bin dabei <span className="btn__arrow">↗</span></a><span className="hero__small"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m5 12 4 4L19 6"/></svg> Kein gewöhnlicher 9-to-5-Pitch</span></div>
-            <div className="hero__tags"><span className="pill">⚡ Mitgründerrolle</span><span className="pill">✳ Product & Support</span><span className="pill pill--muted">✦ Alles noch im Aufbau</span></div>
           </div>
           <div className="art-wrap" aria-label="Illustration: Vouchly im Aufbau">
             <div className="art"><div className="art__top"><span>VOUCHLY / BUILD MODE</span><span className="art__live">IDEEN ONLINE</span></div><div className="art__big-letter" aria-hidden="true">V</div><div className="art__bottom"><span>FROM ZERO TO SOMETHING</span><strong>GOOD THINGS START HERE.</strong></div></div>
@@ -119,9 +109,9 @@ export default function HomePage() {
       <section className="section" id="rolle" aria-labelledby="role-title"><div className="container">
         <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow__line"/> 01 / DIE MISSION</div><h2 id="role-title">Du baust mit.<br/>Nicht nur Tickets ab.</h2></div><p>Drei Bereiche, eine Rolle – und ganz sicher kein Job, bei dem du nur auf Anweisungen wartest.</p></div>
         <div className="mission-grid">
-          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 01</span><span className="mission-card__icon"><ProductIcon/></span></div><div className="mission-card__content"><h3>Product mitdenken.</h3><p>Features hinterfragen, Ideen entwickeln und Vouchly Schritt für Schritt besser machen.</p></div></article>
-          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 02</span><span className="mission-card__icon"><SupportIcon/></span></div><div className="mission-card__content"><h3>Menschen helfen.</h3><p>Fragen beantworten, Probleme lösen und auch dann freundlich bleiben, wenn’s brennt.</p></div></article>
-          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 03</span><span className="mission-card__icon"><FounderIcon/></span></div><div className="mission-card__content"><h3>Mitgründen.</h3><p>Strategie, Entscheidungen und Verantwortung mitgestalten – statt nur Aufgaben abhaken.</p></div></article>
+          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 01</span></div><div className="mission-card__content"><h3>Product mitdenken.</h3><p>Features hinterfragen, Ideen entwickeln und Vouchly Schritt für Schritt besser machen.</p></div></article>
+          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 02</span></div><div className="mission-card__content"><h3>Menschen helfen.</h3><p>Fragen beantworten, Probleme lösen und auch dann freundlich bleiben, wenn’s brennt.</p></div></article>
+          <article className="mission-card"><div className="mission-card__top"><span className="mission-card__number">/ 03</span></div><div className="mission-card__content"><h3>Mitgründen.</h3><p>Strategie, Entscheidungen und Verantwortung mitgestalten – statt nur Aufgaben abhaken.</p></div></article>
         </div>
       </div></section>
 
