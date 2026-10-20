@@ -46,29 +46,42 @@ export default function HomePage() {
     const data = Object.fromEntries(new FormData(currentForm).entries());
     setDraft(data);
     setStatus(null);
-    // Static hosting (GitHub Pages) has no API route, so offer the draft download directly.
-    if (process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true') {
-      setStatus({ kind: 'draft', message: 'Der E-Mail-Versand ist in dieser Demo noch nicht eingerichtet. Deine Daten wurden nicht verschickt. Du kannst deinen Entwurf als Textdatei herunterladen.' });
+    // Honeypot: quietly discard automated spam submissions.
+    if (data.website) {
+      setStatus({ kind: 'success', message: 'Deine Nachricht wurde übermittelt. Danke für dein Interesse!' });
+      currentForm.reset();
+      return;
+    }
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+    if (!accessKey) {
+      setStatus({ kind: 'draft', message: 'Der Versand ist noch nicht eingerichtet. Deine Daten wurden nicht verschickt. Du kannst deinen Entwurf als Textdatei herunterladen.' });
       return;
     }
     setLoading(true);
     try {
-      const response = await fetch('/api/apply', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: accessKey,
+          subject: `Vouchly: Interessensbekundung von ${data.name}`,
+          from_name: 'Vouchly Website',
+          name: data.name,
+          email: data.email,
+          Fokus: focusLabels[data.focus] || data.focus,
+          Link: data.link || '–',
+          message: data.message,
+        }),
       });
       const result = await response.json().catch(() => ({}));
-      if (response.ok) {
+      if (response.ok && result.success) {
         setStatus({ kind: 'success', message: 'Deine Nachricht wurde übermittelt. Danke für dein Interesse!' });
         currentForm.reset();
-      } else if (result.code === 'NOT_CONFIGURED') {
-        setStatus({ kind: 'draft', message: 'Der E-Mail-Versand ist in dieser Demo noch nicht eingerichtet. Deine Daten wurden nicht verschickt. Du kannst deinen Entwurf als Textdatei herunterladen.' });
       } else {
-        setStatus({ kind: 'error', message: result.error || 'Die Übermittlung hat leider nicht geklappt. Du kannst deinen Entwurf stattdessen herunterladen.' });
+        setStatus({ kind: 'error', message: 'Die Übermittlung hat leider nicht geklappt. Du kannst deinen Entwurf stattdessen herunterladen.' });
       }
     } catch {
-      setStatus({ kind: 'error', message: 'Der Server ist nicht erreichbar. Du kannst deinen Entwurf als Textdatei herunterladen.' });
+      setStatus({ kind: 'error', message: 'Der Versanddienst ist nicht erreichbar. Du kannst deinen Entwurf als Textdatei herunterladen.' });
     } finally {
       setLoading(false);
     }
@@ -125,13 +138,13 @@ export default function HomePage() {
 
       <section className="apply-section" id="bewerben" aria-labelledby="apply-title"><div className="container"><div className="apply-panel">
         <div className="apply-panel__aside"><div><span className="apply-panel__tag">DEIN NÄCHSTER MOVE ↗</span><h2 id="apply-title">Klingt<br/>verrückt?<br/>Passt.</h2><p>Ein kurzer Text reicht. Kein fünfseitiges Motivationsschreiben und kein Buzzword-Bingo – erzähl uns einfach, was dich antreibt.</p></div><div className="apply-panel__aside-bottom"><span>i</span> KONZEPT / KEINE OFFIZIELLE AUSSCHREIBUNG</div></div>
-        <div className="form-card"><h3>Say hi. 👋</h3><p className="form-card__intro">Füll das Formular aus. In der Next.js-Version klappt der Versand nach Einrichtung der E-Mail-Zugangsdaten.</p>
+        <div className="form-card"><h3>Say hi. 👋</h3><p className="form-card__intro">Füll das Formular aus – deine Nachricht landet direkt bei uns im Postfach.</p>
           <form onSubmit={handleSubmit}>
             <div className="hp-field" aria-hidden="true"><label htmlFor="site-website">Website (leer lassen)</label><input id="site-website" name="website" tabIndex={-1} autoComplete="off"/></div>
             <div className="form-grid"><div className="field"><label htmlFor="full-name">Dein Name *</label><input id="full-name" name="name" type="text" required maxLength={100} autoComplete="name" placeholder="Max Mustermann"/></div><div className="field"><label htmlFor="email">Deine E-Mail *</label><input id="email" name="email" type="email" required maxLength={200} autoComplete="email" placeholder="du@beispiel.de"/></div></div>
             <div className="form-grid"><div className="field"><label htmlFor="focus">Dein Fokus *</label><select id="focus" name="focus" required defaultValue=""><option value="" disabled>Was liegt dir mehr?</option><option value="product">Product & Ideen</option><option value="support">Support & Menschen</option><option value="both">Beides – ich mag Abwechslung</option></select></div><div className="field"><label htmlFor="link">Link (optional)</label><input id="link" name="link" type="url" maxLength={300} placeholder="https://dein-profil.de"/></div></div>
             <div className="field"><label htmlFor="message">Warum willst du Vouchly mit aufbauen? *</label><textarea id="message" name="message" required minLength={10} maxLength={3000} placeholder="Ich hab da eine Idee ..."/></div>
-            <div className="form-submit"><button type="submit" disabled={loading}>{loading ? 'Wird geprüft …' : 'Interesse bekunden'} <span aria-hidden="true">↗</span></button><span className="form-hint">* Pflichtfelder · Demo ohne garantierten Versand</span></div>
+            <div className="form-submit"><button type="submit" disabled={loading}>{loading ? 'Wird geprüft …' : 'Interesse bekunden'} <span aria-hidden="true">↗</span></button><span className="form-hint">* Pflichtfelder</span></div>
             {status && <div role="status" aria-live="polite" className={`form-result ${status.kind === 'error' ? 'form-result--error' : ''}`}>{status.message}{status.kind !== 'success' && draft && <div><button type="button" onClick={() => saveDraft(draft)}>Entwurf als .txt speichern ↓</button></div>}</div>}
           </form>
         </div>

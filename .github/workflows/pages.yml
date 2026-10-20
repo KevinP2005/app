@@ -25,13 +25,11 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm install
-      # GitHub Pages is static hosting: the server-side API route cannot run there.
-      - run: rm -rf app/api
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          NEXT_PUBLIC_STATIC_EXPORT: 'true'
+          NEXT_PUBLIC_WEB3FORMS_KEY: ${{ vars.WEB3FORMS_ACCESS_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

@@ -15,20 +15,12 @@ Dann `http://localhost:3000` öffnen.
 
 ## Formular
 
-Das Formular validiert Name, E-Mail, Schwerpunkt, optionalen Link und eine kurze Motivation.
+Das Formular validiert Name, E-Mail, Schwerpunkt, optionalen Link und eine kurze Motivation und schickt die Einsendung über [Web3Forms](https://web3forms.com) direkt an das hinterlegte Postfach – ohne eigenen Server.
 
-- **Ohne E-Mail-Konfiguration:** Die API liefert `NOT_CONFIGURED`; das Formular zeigt transparent an, dass **nichts versendet wurde**, und bietet einen Download des Entwurfs als Textdatei an.
-- **Mit E-Mail-Konfiguration:** Der Next.js-Server versendet die Interessensbekundung über die [Resend API](https://resend.com/docs/send-with-nextjs) an dein definiertes Postfach. Der API-Schlüssel bleibt serverseitig.
+- **Access Key:** wird aus `NEXT_PUBLIC_WEB3FORMS_KEY` gelesen. Auf GitHub Pages kommt er aus der Repository-Variable `WEB3FORMS_ACCESS_KEY` (Settings → Secrets and variables → Actions → Variables). Lokal in `.env.local` eintragen.
+- **Ohne Access Key:** Es wird nichts versendet; das Formular bietet den Entwurf als Textdatei zum Download an.
 
-Dazu `.env.example` nach `.env.local` kopieren und ausfüllen:
-
-```env
-RESEND_API_KEY=re_...
-APPLICATION_TO_EMAIL=deine-echte-empfangsadresse@example.com
-APPLICATION_FROM_EMAIL=Vouchly <bewerbung@deine-verifizierte-domain.de>
-```
-
-`APPLICATION_FROM_EMAIL` muss eine bei Resend zugelassene Absenderadresse sein. Nach dem Setzen die Entwicklungsumgebung neu starten.
+Der Access Key ist eine öffentliche Kennung und darf im ausgelieferten Code stehen.
 
 ### Vor einer echten Veröffentlichung
 
@@ -38,7 +30,6 @@ Diese Seite ist bewusst eine fiktive Demo. Bevor echte personenbezogene Bewerbun
 
 - `app/page.jsx` – One-Pager, Design und Formular
 - `app/globals.css` – Responsives Styling
-- `app/api/apply/route.js` – Optionaler E-Mail-Versand über Resend
 - `app/layout.jsx` – Metadata / Seitensprache
 
 Zusätzlich zur Next.js-Version gibt es separat eine **standalone HTML-Datei** (ohne Server), deren Formular lokal einen `.txt`-Entwurf herunterlädt.
