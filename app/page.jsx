@@ -88,7 +88,6 @@ export default function HomePage() {
   }
 
   return <>
-    <div className="demo-strip"><div className="container demo-strip__inner"><span className="demo-strip__dot"/> KONZEPTSEITE · FIKTIVE STELLENAUSSCHREIBUNG MIT AUGENZWINKERN</div></div>
     <header className="site-header">
       <div className="container site-header__inner">
         <a className="brand" href="#top" aria-label="EZHost Vouchly – zurück zum Anfang">
